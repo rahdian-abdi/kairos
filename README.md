@@ -62,11 +62,11 @@ python kairos.py
 1. **Input your API cURL command.**
 
 2. **Provide custom files and parameters for different tests:**
-    - **Broken Object Level Authorization Test:** Custom file for UUID. In case you have list of valid UUID it will cretainly help to test.
-    - **Broken User Authentication Test:** Custom file and parameter for fuzzing. If you have specific payload to test ex: otp and provide the list for the payload.
-    - **Broken Object Property Level Authorization Test:** Custom HTTP method and payload. It will test if certain method will give unintended response. 
-    - **Unrestricted Resource Consumption Test:** Custom file and payload parameter. The file and payload parameter needed to test if there is a limit for the request.
-    - **Server Side Request Forgery Test:** Custom payload parameter. It will test if certain payload parameter call the url inside the app and will be replaced by common url meta.
+    - **Broken Object Level Authorization Test:** Utilize a custom UUID file. If you have a list of valid UUIDs, it will help test this effectively.
+    - **Broken User Authentication Test:** Employ a custom file and parameter for fuzzing. Specific payloads, like OTPs, can be provided for testing.
+    - **Broken Object Property Level Authorization Test:** Customize HTTP methods and payloads to test if certain methods return unintended responses.
+    - **Unrestricted Resource Consumption Test:** Use a custom file and payload parameter to test if there are any limits for requests.
+    - **Server Side Request Forgery Test:** Custom payload parameter. Implement a custom payload parameter to check if specific parameters call URLs within the application, potentially replaced by common URL metadata.
 
     All the payload is optional, you can adjust based on your need.
 
