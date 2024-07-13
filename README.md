@@ -49,7 +49,7 @@ pip install -r requirements.txt
 
 1. **Run Kairos:**
 ```bash
-python kairos.py
+python3 kairos.py
 ```
 
 2. **Commands:**
@@ -68,7 +68,7 @@ python kairos.py
     - **Unrestricted Resource Consumption Test:** Use a custom file and payload parameter to test if there are any limits for requests.
     - **Server Side Request Forgery Test:** Custom payload parameter. Implement a custom payload parameter to check if specific parameters call URLs within the application, potentially replaced by common URL metadata.
 
-    All the payload is optional, you can adjust based on your need.
+    All the payloads are optional, you can adjust based on your need.
 
 ### Example
 
