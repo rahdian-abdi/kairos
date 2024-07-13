@@ -1,6 +1,6 @@
 <div align="center">
   <a href="">
-    <img src="files/banner.png" width="400" height="144">
+    <img src="files/banner.png" width="800" height="288">
   </a>
 
   <p align="center">
