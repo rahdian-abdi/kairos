@@ -1,3 +1,13 @@
+<div align="center">
+  <a href="">
+    <img src="files/banner.png" width="400" height="144">
+  </a>
+
+  <p align="center">
+    Kairos v1.0.0
+  </p>
+</div>
+
 # Kairos API Security Scanner
 
 Kairos is a comprehensive API security scanner designed to identify common vulnerabilities in your APIs inspired by the OWASP API Top 10. By simply using your API cURL command, Kairos scans and reports potential security flaws to help you safeguard your APIs effectively.
