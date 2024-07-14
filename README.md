@@ -26,6 +26,9 @@ Kairos is a comprehensive API security scanner designed to identify common vulne
 - **Injection Attacks**
 - **Remote Code Execution**
 
+## Log Update
+- Version 1.0.0 (7/14/2024) Refactor and can add cURL list file for multiple scan. Must be one line and separated by line 
+
 ## Requirements
 
 Before using Kairos, ensure you have the following installed:
