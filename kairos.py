@@ -1,4 +1,5 @@
 import readline
+import os
 from discovery.curl_parser import parser_curl
 from scanning.excessive_data_exposure import check_excessive_data_exposure
 from scanning.injection_attack import check_injection_attacks
@@ -95,7 +96,18 @@ def main():
         if command == 'help':
             show_help()
         elif command == 'scan':
-            url = input("\ncURL > ").strip()
+            list_curl = input("\ncURL list file > ")
+            curl_list = []
+            if list_curl and os.path.isfile(list_curl):
+                with open (list_curl, 'r') as curl:
+                    curl_list = [c.strip() for c in curl.readlines()]
+                print("\033[92m" + f"[v] cURL list loaded from {list_curl}" + "\033[0m")
+            else:
+                print("\033[93m" + f"[!] No cURL file loaded. Change to single cURL input" + "\033[0m")        
+
+
+            if not curl_list:
+                url = input("\ncURL > ").strip()
 
             # BOLA
             print(f"\n\033[93m[-] Custom file for Broken Object Level Authorization Test.\033[0m\n")
@@ -129,7 +141,8 @@ def main():
             # API10-2023
 
             # Main Scan
-            scan_api(url, uuid_file_bola, parameter_bua_file, fuzz_param_bua, custom_method_bopla, custom_body_bopla, custom_file_urc, fuzz_param_urc, fuzz_param_ssrf)
+            for u in curl_list:
+                scan_api(u, uuid_file_bola, parameter_bua_file, fuzz_param_bua, custom_method_bopla, custom_body_bopla, custom_file_urc, fuzz_param_urc, fuzz_param_ssrf)
             print(f"\nAPI scan is complete!\n")
         elif command == 'exit':
             exit()

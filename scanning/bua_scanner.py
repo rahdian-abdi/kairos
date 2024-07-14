@@ -19,23 +19,16 @@ def fuzz_bua_vulnerability(method, url, headers, body=None, parameter_bua_file=N
 
     with tqdm(total=total, desc="[-] Fuzzing Progress", bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
         for value in parameter_list:
-            # Create a payload with the fuzzed parameter
             payload = {**body, fuzz_param_bua: value}
             
-            # Send the request
             response = requests.request(method, url, headers=headers, json=payload)
             
-            # Check for successful authentication or other indicators of a BUA vulnerability
             if response.status_code == 200:
-                # print(f"\033[91m[!] BUA vulnerability detected with payload: {payload}\033[0m")
                 bua_detected = True
                 evil_payload.append(value)
-                # pbar.update(total - pbar.n)  # Complete the progress bar
-                # break
 
-            # Update the progress bar
             pbar.update(1)
-            sleep(0.1)  # Small delay to make the progress visible
+            sleep(0.1) 
 
     if evil_payload:
         for i, val in enumerate(evil_payload):

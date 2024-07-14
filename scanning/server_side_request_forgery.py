@@ -1,4 +1,4 @@
-import requests
+import requests # type: ignore
 
 def ssrf_test(method, url, headers, body=None, parameter_fuzz_ssrf=None):
     body = {} if body is None else body

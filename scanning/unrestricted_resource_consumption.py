@@ -13,7 +13,6 @@ def urc_test(method, url, headers, body=None, urc_fuzz_file=None, fuzz_param_urc
         print(f"\033[91m[!] The file {urc_fuzz_file} does not exist or is not a file.\033[0m")
         return
     
-    # Load fuzzing values from the file
     with open(urc_fuzz_file, 'r') as file:
         fuzz_values = [line.strip() for line in file.readlines()]
 
@@ -34,7 +33,6 @@ def urc_test(method, url, headers, body=None, urc_fuzz_file=None, fuzz_param_urc
         print(f"\033[94mFinished sending {request_count} requests in {total_time:.2f} seconds.\033[0m")
         print("\033[91m" + "[!] No limiting request detected, higher possibility for Unrestricated Resource consumption vulnerability!" + "\033[0m")
     else:
-        # fuzz_param = input("Enter the payload parameter to fuzz: ")
         print(f"\033[94mRunning rate limiting test for {method} requests...\033[0m")
         start_time = time.time()
         for i, fuzz_value in enumerate(fuzz_values):

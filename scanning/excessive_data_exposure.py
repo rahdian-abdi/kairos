@@ -22,11 +22,7 @@ def check_excessive_data_exposure(method, url, headers=None):
 
         fields_match = re.findall(r'[a-zA-Z0-9_]*[iI]d', data)
         exposed_fields = [field for field in sensitive_fields if field in data]
-        # exposed_fields.extend([field for field in fields_match if field not in exposed_fields])
-
-        for i, field in enumerate(fields_match):
-            if field not in exposed_fields:
-                exposed_fields.append(field)
+        exposed_fields.extend([field for field in fields_match if field not in exposed_fields])
 
         if exposed_fields or fields_match:
             print(f"\033[91m[!] Excessive data exposure detected: {', '.join(exposed_fields)}\033[0m")
