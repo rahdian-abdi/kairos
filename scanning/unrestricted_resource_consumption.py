@@ -16,7 +16,8 @@ def urc_test(method, url, headers, body=None, urc_fuzz_file=None, fuzz_param_urc
     with open(urc_fuzz_file, 'r') as file:
         fuzz_values = [line.strip() for line in file.readlines()]
 
-    body = {} if body is None else body    
+    body = {} if body is None else body  
+    request_count = 15  
 
 
     if method == "GET":
