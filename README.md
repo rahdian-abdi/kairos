@@ -8,10 +8,6 @@
   </p>
 </div>
 
-Certainly! Here's a comprehensive README file for your Kairos project:
-
----
-
 # Kairos API Vulnerability Scanner
 
 Kairos is an open-source API vulnerability scanner designed to detect and address security flaws in your APIs. Inspired by the OWASP API Top 10, Kairos helps safeguard your APIs effectively by scanning for common vulnerabilities using API cURL commands.
