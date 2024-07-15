@@ -1,4 +1,4 @@
-import requests
+import requests # type: ignore
 import json
 import time
 import shlex
@@ -13,10 +13,10 @@ def rate_limiting_test(method, url, headers, body, rl_file=None):
         print(f"\033[91m[!] The file {rl_file} does not exist or is not a file. Exiting.\033[0m")
         return
     
-    # Load fuzzing values from the file
     with open(rl_file, 'r') as file:
         fuzz_values = [line.strip() for line in file.readlines()]
 
+    request_count = 15    
 
     if method == "GET":
         print("\033[94m" + "Running rate limiting test for GET requests..." + "\033[0m")

@@ -18,10 +18,6 @@ from scanning.improper_asset_management import improper_asset_management_test
 
 
 
-
-
-
-
 def print_banner():
     banner = """             
   _         _               
@@ -45,9 +41,23 @@ Type 'help' to see available commands
 def show_help():
     help_text = """
     Commands:
-    -------------------
+    --------------------------
+    input       - Enter kairos_options custom payload. Enter 'done' when complete
+    payload     - Show the current payload
     scan        - Scan the provided API for vulnerabilities
     exit        - Exit the tool
+
+    Command for kairos_options:
+    ---------------------------
+    set curlList <file_location>  : Specify the file containing the list of cURL commands.
+    set bolaFile <file_location>  : Specify the custom file for Broken Object Level Authorization.
+    set buaFile <file_location>   : Specify the fuzzing file for Broken User Authentication.
+    set buaParameter <parameter>  : Specify the parameter to fuzz for Broken User Authentication.
+    set boplaMethod <method>      : Specify the HTTP method for Broken Object Property Level Authorization.
+    set boplaPayload              : Specify the payload for Broken Object Property Level Authorization. Enter 'done' when finished.
+    set urcFile <file_location>   : Specify the fuzzing file for Unrestricted Resource Consumption.
+    set urcParameter <parameter>  : Specify the parameter to fuzz for Unrestricted Resource Consumption.
+    set ssrfParameter <parameter> : Specify the parameter to fuzz for Server Side Request Forgery.
     """
     print(help_text)
 
@@ -56,7 +66,70 @@ def exit():
     print(exit_text)
 
 def other_input():
-    print("Command not found! Try to type 'help'")    
+    print("Command not found! Try to type 'help'") 
+
+# Global Variable
+curl_list = ""
+bola_file = ""
+bua_file = ""
+bua_parameter = ""
+bopla_method = ""
+bopla_payload = {}
+urc_file = ""
+urc_parameter = ""
+ssrf_parameter = ""    
+
+def collect_user_input():
+    global curl_list, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter
+    while True:
+        command_options = input("\033[94m" + "kairos_options\033[0m > ").strip()
+        chunks_command_options = command_options.split(' ')
+        if chunks_command_options[0].lower() == 'set':
+            if chunks_command_options[1] == 'curlList':
+                curl_list = chunks_command_options[2]
+            elif chunks_command_options[1] == 'bolaFile':
+                bola_file = chunks_command_options[2]
+            elif chunks_command_options[1] == 'buaFile':
+                bua_file = chunks_command_options[2]
+            elif chunks_command_options[1] == 'buaParameter':
+                bua_parameter = chunks_command_options[2]
+            elif chunks_command_options[1] == 'boplaMethod':
+                bopla_method = chunks_command_options[2]
+            elif chunks_command_options[1] == 'boplaPayload':
+                while True:
+                    field = input("> Enter the field you want to change or add: ")
+                    if field.lower() == 'done':
+                        break
+                    value = input(f"> Enter the value for {field}: ")
+                    bopla_payload[field] = value
+            elif chunks_command_options[1] == 'urcFile':
+                urc_file = chunks_command_options[2]
+            elif chunks_command_options[1] == 'urcParameter':
+                urc_parameter = chunks_command_options[2]
+            elif chunks_command_options[1] == 'ssrfParameter':
+                ssrf_parameter = chunks_command_options[2]
+            else:
+                print(f"Payload is not recognized")    
+        elif chunks_command_options[0].lower() == 'done':
+            break
+        else:
+            print(f"Command not recognized!")
+def show_user_options():
+    options_show = f"""
+    Custom Input:
+    -------------------
+    cURL File        - {curl_list}
+    BOLA File        - {bola_file}
+    BUA File         - {bua_file}
+    BUA Parameter    - {bua_parameter}
+    BOPLA Method     - {bopla_method}
+    BOPLA Payload    - {bopla_payload}
+    URC File         - {urc_file}
+    URC Parameter    - {urc_parameter}
+    SSRF Parameter   - {ssrf_parameter}
+    """
+    print(options_show)
+          
 
 def scan_api(base_url, uuid_file, parameter_bua_file, fuzz_param_bua, custom_method_bopla, custom_body_bopla, urc_fuzz_file, fuzz_param_urc, fuzz_param_ssrf):
     method, url, headers, body_json = parser_curl(base_url)
@@ -94,55 +167,22 @@ def main():
         command = input("\033[4m" + "kairos\033[0m > ").strip().lower()
         
         if command == 'help':
-            show_help()
+            show_help()    
+        elif command == 'input':
+            collect_user_input()
+        elif command == 'payload':
+            show_user_options()
         elif command == 'scan':
-            list_curl = input("\ncURL list file > ")
-            curl_list = []
-            if list_curl and os.path.isfile(list_curl):
-                with open (list_curl, 'r') as curl:
-                    curl_list = [c.strip() for c in curl.readlines()]
-                print("\033[92m" + f"[v] cURL list loaded from {list_curl}" + "\033[0m")
-            else:
-                print("\033[93m" + f"[!] No cURL file loaded. Change to single cURL input" + "\033[0m")        
-
-
-            if not curl_list:
-                url = input("\ncURL > ").strip()
-
-            # BOLA
-            print(f"\n\033[93m[-] Custom file for Broken Object Level Authorization Test.\033[0m\n")
-            uuid_file_bola = input("> UUID file: ")
-            # BUA
-            print(f"\n\033[93m[-] Custom file and parameter for Broken User Authentication Test.\033[0m\n")
-            parameter_bua_file = input("> Fuzz file: ")
-            fuzz_param_bua = input("> Parameter to fuzz: ").strip()
-            # BOPLA
-            print(f"\n\033[93m[-] Custom method and payload for Broken Object Property Level Authorization Test.\033[0m\n")
-            custom_method_bopla = input("> HTTP method (GET, POST, PUT, DELETE): ").upper()
-            custom_body_bopla = {}
-            print(f"\n\033[94mCustom payload for BOPLA. Type 'done' when you finish\033[0m\n")
-            while True:
-                field = input("> Enter the field you want to change or add: ")
-                if field.lower() == 'done':
-                    break
-                value = input(f"> Enter the value for {field}: ")
-                custom_body_bopla[field] = value
-            # URC
-            print(f"\n\033[93m[-] Custom file and payload parameter for Unrestricted Resource Consumption Test.\033[0m\n")
-            custom_file_urc = input("> Fuzz file: ")
-            fuzz_param_urc = input("> Parameter to fuzz: ")
-            # BFLA
-            # API6-2023
-            # SSRF
-            print(f"\n\033[93m[-] Custom payload parameter for Server Side Request Forgery Test.\033[0m\n")
-            fuzz_param_ssrf = input(f"> Parameter to fuzz: ")
-            # SM
-            # IAM
-            # API10-2023
-
             # Main Scan
-            for u in curl_list:
-                scan_api(u, uuid_file_bola, parameter_bua_file, fuzz_param_bua, custom_method_bopla, custom_body_bopla, custom_file_urc, fuzz_param_urc, fuzz_param_ssrf)
+            curls = []
+            if curl_list and os.path.isfile(curl_list):
+                with open (curl_list, 'r') as curl_f:
+                    curls = [curl.strip() for curl in curl_f.readlines()]
+                print("\033[92m" + f"[v] cURL list loaded from {curl_list}" + "\033[0m")
+            else:
+                print("\033[93m" + f"[!] No cURL file loaded." + "\033[0m") 
+            for u in curls:
+                scan_api(u, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter)
             print(f"\nAPI scan is complete!\n")
         elif command == 'exit':
             exit()
