@@ -88,7 +88,12 @@ def collect_user_input():
         chunks_command_options = command_options.split(' ')
         if chunks_command_options[0].lower() == 'set':
             if chunks_command_options[1] == 'curlList':
-                curl_list = chunks_command_options[2]
+                if len(chunks_command_options) > 3:
+                    for chunks in chunks_command_options:
+                        curl_list += chunks + ' '
+                    curl_list = curl_list.strip()    
+                else:
+                    curl_list = chunks_command_options[2]        
             elif chunks_command_options[1] == 'bolaFile':
                 bola_file = chunks_command_options[2]
             elif chunks_command_options[1] == 'buaFile':
@@ -190,11 +195,11 @@ def main():
                     for single_url in curl_extracted:
                         fuzzing_api(single_url)
                     print(f"\nAPI scan is complete!\n")
+            elif "curl" in curl_list:
+                fuzzing_api(curl_list)
+                print(f"\nAPI scan is complete!\n")        
             else:
                 print("\033[93m" + f"[!] No cURL file loaded." + "\033[0m")
-
-
-
         elif command == 'scan':
             # Main Scan
             curls = []
@@ -205,6 +210,9 @@ def main():
                 for single_url in curls:
                     scan_api(single_url, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter)
                 print(f"\nAPI scan is complete!\n")
+            elif "curl" in curl_list:
+                scan_api(curl_list, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter)
+                print(f"\nAPI scan is complete!\n")   
             else:
                 print("\033[93m" + f"[!] No cURL file loaded." + "\033[0m") 
             

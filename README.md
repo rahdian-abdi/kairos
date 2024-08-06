@@ -13,6 +13,7 @@
 Kairos is an open-source API vulnerability scanner designed to detect and address security flaws in your APIs. Inspired by the OWASP API Top 10, Kairos helps safeguard your APIs effectively by scanning for common vulnerabilities using API cURL commands.
 
 ## Log Update
+- Version 1.0.0 (8/6/2024) Adding fuzzer feature.
 - Version 1.0.0 (7/15/2024) User can set-up all the payload and review it with new command.
 - Version 1.0.0 (7/14/2024) Refactor and can add cURL list file for multiple scan. Must be separated by line with every API in one-line format
 
@@ -67,7 +68,7 @@ python kairos.py
 
 Use the `input` command to set custom inputs for your scans. Available options include:
 
-- `set curlList <file>`: Specify the file containing the list of cURL commands.
+- `set curlList <file>`: Specify the file containing the list of cURL commands or just put single curl with the same command
 - `set bolaFile <file>`: Specify the custom file for Broken Object Level Authorization.
 - `set buaFile <file>`: Specify the fuzzing file for Broken User Authentication.
 - `set buaParameter <parameter>`: Specify the parameter to fuzz for Broken User Authentication.
