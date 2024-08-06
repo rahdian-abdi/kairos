@@ -15,6 +15,7 @@ from scanning.server_side_request_forgery import ssrf_test
 from scanning.security_misconfiguration import check_security_misconfiguration
 from scanning.improper_asset_management import improper_asset_management_test
 # API10:2023 - Unsafe Consumption of APIs
+from fuzzing.fuzzer import fuzz_api
 
 
 
@@ -44,6 +45,7 @@ def show_help():
     --------------------------
     input       - Enter kairos_options custom payload. Enter 'done' when complete
     payload     - Show the current payload
+    fuzz        - Fuzzing randomly the API
     scan        - Scan the provided API for vulnerabilities
     exit        - Exit the tool
 
@@ -129,6 +131,13 @@ def show_user_options():
     SSRF Parameter   - {ssrf_parameter}
     """
     print(options_show)
+
+def fuzzing_api(base_url):
+    method, url, headers, body = parser_curl(base_url)
+    print("Running API Fuzzing...")
+    print(f"\n╔══════════╣ RANDOM VALUE FUZZING\n")
+    fuzz_api(method, url, headers, body)
+
           
 
 def scan_api(base_url, uuid_file, parameter_bua_file, fuzz_param_bua, custom_method_bopla, custom_body_bopla, urc_fuzz_file, fuzz_param_urc, fuzz_param_ssrf):
@@ -172,6 +181,20 @@ def main():
             collect_user_input()
         elif command == 'payload':
             show_user_options()
+        elif command == 'fuzz':
+            curl_extracted = []
+            if curl_list and os.path.isfile(curl_list):
+                with open(curl_list, 'r') as curl_raw:
+                    curl_extracted = [curl.strip() for curl in curl_raw.readlines()]
+                    print("\033[92m" + f"[v] cURL list loaded from {curl_list}" + "\033[0m")
+                    for single_url in curl_extracted:
+                        fuzzing_api(single_url)
+                    print(f"\nAPI scan is complete!\n")
+            else:
+                print("\033[93m" + f"[!] No cURL file loaded." + "\033[0m")
+
+
+
         elif command == 'scan':
             # Main Scan
             curls = []
@@ -179,11 +202,12 @@ def main():
                 with open (curl_list, 'r') as curl_f:
                     curls = [curl.strip() for curl in curl_f.readlines()]
                 print("\033[92m" + f"[v] cURL list loaded from {curl_list}" + "\033[0m")
+                for single_url in curls:
+                    scan_api(single_url, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter)
+                print(f"\nAPI scan is complete!\n")
             else:
                 print("\033[93m" + f"[!] No cURL file loaded." + "\033[0m") 
-            for u in curls:
-                scan_api(u, bola_file, bua_file, bua_parameter, bopla_method, bopla_payload, urc_file, urc_parameter, ssrf_parameter)
-            print(f"\nAPI scan is complete!\n")
+            
         elif command == 'exit':
             exit()
             break
